@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Sistema Gestione Veicoli{% endblock %}</title>
+    <meta
+      name="description"
+      content="Sistema per la gestione di veicoli, targhe e revisioni"
+    />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    {% if request.resolver_match.url_name == 'login' %}
+      <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    {% endif %} {% block extra_css %}{% endblock %}
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <header id="header" class="header py-3 border-bottom">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <a href="{% url 'dashboard' %}" class="logo text-decoration-none">
+            <i class="bi bi-car-front"></i> Sistema Gestione Veicoli
+          </a>
+
+          <!-- User menu or login button -->
+          {% if user.is_authenticated %}
+          <div>
+            <!-- User Menu -->
+            <div class="dropdown" id="user-menu">
+              <button class="btn btn-outline-primary dropdown-toggle" type="button" id="user-menu-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle"></i>
+                <span id="user-menu-username">{{ user.username }}</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu-dropdown">
+                <li>
+                  <a
+                    class="dropdown-item text-danger"
+                    href="{% url 'logout' %}"
+                    id="logout-button"
+                    ><i class="bi bi-box-arrow-right"></i> Logout</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    {% if user.is_authenticated %}
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4"
+    >
+      <div class="container">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarMain"
+          aria-controls="navbarMain"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                href="{% url 'dashboard' %}"
+              >
+                <i class="bi bi-house"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'veicoli_list' %}active{% endif %}"
+                href="{% url 'veicoli_list' %}"
+              >
+                <i class="bi bi-car-front"></i> Veicoli
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'targhe_list' %}active{% endif %}"
+                href="{% url 'targhe_list' %}"
+              >
+                <i class="bi bi-upc-scan"></i> Targhe
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'targhe_restituite_list' %}active{% endif %}"
+                href="{% url 'targhe_restituite_list' %}"
+              >
+                <i class="bi bi-people"></i> Targhe restituite
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'targhe_attive_list' %}active{% endif %}"
+                href="{% url 'targhe_attive_list' %}"
+              >
+                <i class="bi bi-bar-chart"></i> Targhe attive
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'revisioni_list' %}active{% endif %}"
+                href="{% url 'revisioni_list' %}"
+              >
+                <i class="bi bi-bar-chart"></i> Revisioni
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    {% endif %}
+
+    <div
+      class="container main-container py-4 {% if not user.is_authenticated %}d-flex flex-column{% endif %}"
+    >
+      {% if messages %}
+      <div id="notification-area">
+        {% for message in messages %}
+        <div
+          class="alert alert-{{ message.tags }} alert-dismissible fade show"
+          role="alert"
+        >
+          {{ message }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- CSRF Token setup for AJAX -->
+    <script>
+      // Setup CSRF for AJAX requests
+      function getCSRFToken() {
+        return (
+          $("[name=csrfmiddlewaretoken]").val() ||
+          $("meta[name=csrf-token]").attr("content")
+        );
+      }
+
+      $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+          if (
+            !/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) &&
+            !this.crossDomain
+          ) {
+            xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+          }
+        },
+      });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

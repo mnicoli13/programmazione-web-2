@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
+<div class="mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="page-title d-flex align-items-center">
+      <i class="bi bi-clipboard-check"></i> {{ page_title }}
+    </h1>
+  </div>
+  <p class="intro-text">{{ page_description }}</p>
+</div>
+
+<div id="notification-area"></div>
+
+{# Include filter #} {% include 'includes/filter.html' %}
+
+<div id="empty-state" class="empty-state" style="display: none">
+  <i class="bi bi-search"></i>
+  <h4>Nessuna revisione trovata</h4>
+  <p>Prova a modificare i filtri di ricerca per trovare i dati desiderati.</p>
+</div>
+
+<div id="table-container" data-table-name="revisione" class="mb-4">
+  <div class="table-responsive">
+    <table
+      id="myTable"
+      data-table-name="Revisione"
+      class="table table-striped table-hover"
+    >
+      <thead>
+        <tr>
+          <th class="sortable" data-column="numero" data-order="asc">
+            Numero <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+          <th class="sortable" data-column="targa" data-order="asc">
+            Targa <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+          <th class="sortable" data-column="dataRev" data-order="asc">
+            Data Revisione <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+          <th class="sortable" data-column="esito" data-order="asc">
+            Esito <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+          <th class="sortable" data-column="motivazione" data-order="asc">
+            Motivazione <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {# AJAX-filled #}
+      </tbody>
+    </table>
+  </div>
+  <div id="empty-state" style="display: none">Nessun risultato</div>
+  <div class="table-loader">
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Caricamento...</span>
+      </div>
+      <p class="mt-2 text-muted">Caricamento dei dati in corso...</p>
+    </div>
+  </div>
+</div>
+
+{% include 'includes/footer.html' %} {% endblock %}

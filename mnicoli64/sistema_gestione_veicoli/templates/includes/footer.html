@@ -1,0 +1,69 @@
+{% load static %}
+        </div> <!-- End of main-container -->
+        
+        <footer class="footer py-4 border-top mt-auto">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 text-lg-start text-center mb-3 mb-lg-0">
+                        <span class="text-muted">&copy; {% now "Y" %} Sistema Gestione Veicoli</span>
+                    </div>
+                    <div class="col-lg-6 text-lg-end text-center">
+                        <a href="https://github.com/mnicoli13/programmazione-web" target="_blank" class="text-decoration-none me-3 text-secondary">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                        <a href="#" class="text-decoration-none text-secondary" data-bs-toggle="modal" data-bs-target="#helpModal">
+                            <i class="bi bi-question-circle"></i> Aiuto
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        {% include 'includes/modals/user-guide.html' %}
+
+
+        <!-- Back to top button -->
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
+
+        <!-- Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Custom scripts -->
+
+        <script>
+            const URL_DASHBOARD            = "{% url 'dashboard' %}";
+            const URL_VEICOLI_LIST         = "{% url 'veicoli_list' %}";
+            const URL_VEICOLI_ADD          = "{% url 'veicoli_add' %}";
+            const URL_VEICOLO_DETAIL       = telaio => `{% url 'veicolo_detail' 'TEMPLATE' %}`.replace('TEMPLATE', telaio);
+            const URL_VEICOLO_EDIT         = telaio => `{% url 'veicolo_edit' 'TEMPLATE' %}`.replace('TEMPLATE', telaio);
+            const URL_VEICOLO_DELETE       = telaio => `{% url 'veicolo_delete' 'TEMPLATE' %}`.replace('TEMPLATE', telaio);
+        
+            const URL_API_VEICOLI          = "{% url 'veicoli_api' %}";
+            const URL_API_ADD_VEICOLO      = "{% url 'add_veicolo_api' %}";
+            const URL_API_VEICOLO_DETAIL   = telaio => `{% url 'get_veicolo_api' 'TEMPLATE' %}`.replace('TEMPLATE', telaio);
+            const URL_API_UPDATE_VEICOLO   = telaio => `{% url 'update_veicolo_api' 'TEMPLATE' %}`.replace('TEMPLATE', telaio);
+            const URL_API_DELETE_VEICOLO   = telaio => `{% url 'delete_veicolo_api' 'TEMPLATE' %}`.replace('TEMPLATE', telaio);
+        
+            const URL_TARGHE_LIST          = "{% url 'targhe_list' %}";
+            const URL_API_TARGHE           = "{% url 'targhe_api' %}";
+        
+            const URL_REVISIONI_LIST       = "{% url 'revisioni_list' %}";
+            const URL_TARGHE_ATTIVE_LIST   = "{% url 'targhe_attive_list' %}";
+            const URL_TARGHE_RESTITUITE    = "{% url 'targhe_restituite_list' %}";
+        
+            const URL_API_AUTO_LOGIN       = "{% url 'api-auto-login' %}";
+            const URL_API_LOGIN            = "{% url 'api-login' %}";
+            const URL_API_REGISTER         = "{% url 'api-register' %}";
+            const URL_API_CHECK_USERNAME   = "{% url 'api-check-username' %}";
+            const URL_API_CHECK_EMAIL      = "{% url 'api-check-email' %}";
+
+            const URL_API_TABLE            = "{% url 'api-table' %}";
+        </script>
+        <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'js/crud.js' %}"></script>
+        <script src="{% static 'js/filter.js' %}"></script>
+        <script src="{% static 'js/auth.js' %}"></script>
+    </body>
+</html>

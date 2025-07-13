@@ -1,0 +1,142 @@
+<!-- // Home page content -->
+{% extends 'base.html' %} {% load crispy_forms_tags %} 
+{% block content %}
+
+
+<div class="jumbotron bg-white p-4 shadow-sm rounded mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="display-4 mb-3">Sistema di Gestione Veicoli</h1>
+            <p class="lead mb-4">Gestisci facilmente veicoli, targhe e revisioni tramite questa semplice interfaccia.</p>
+            <p class="mb-4">Seleziona una delle sezioni dal menu in alto o utilizza le schede qui sotto per iniziare a gestire i tuoi dati.</p>
+            <div class="d-flex align-items-center text-muted mb-4">
+                <i class="bi bi-info-circle me-2" style="font-size: 1.5rem;"></i>
+                <span>Per qualsiasi dubbio, clicca sul pulsante "Aiuto" per visualizzare la guida utente.</span>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="bi bi-car-front text-primary" style="font-size: 8rem; opacity: 0.8;"></i>
+        </div>
+    </div>
+    <hr class="my-4">
+    <div class="d-flex">
+        <a href="../veicoli" class="btn btn-primary btn-lg me-3">
+            <i class="bi bi-car-front"></i> Gestisci Veicoli
+        </a>
+        <a href="#" class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#helpModal">
+            <i class="bi bi-question-circle"></i> Guida Utente
+        </a>
+    </div>
+</div>
+
+<!-- // Info section -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title mb-3"><i class="bi bi-lightning-charge text-primary"></i> Funzionalità principali</h4>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-search text-primary me-3" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h5>Ricerca avanzata</h5>
+                                <p class="text-muted">Utilizza i filtri in ogni sezione per trovare rapidamente i dati che cerchi.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-pencil-square text-primary me-3" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h5>Modifica facilitata</h5>
+                                <p class="text-muted">Aggiungi, modifica ed elimina in pochi clic tutte le informazioni dei veicoli.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-link text-primary me-3" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h5>Collegamenti rapidi</h5>
+                                <p class="text-muted">Naviga facilmente tra targhe, veicoli e revisioni attraverso collegamenti intelligenti.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- // Cards section for quick access -->
+<h3 class="mb-3"><i class="bi bi-grid"></i> Accesso rapido alle sezioni</h3>
+
+<div class="row">
+
+    <!-- // Veicoli card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100 card-home">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-car-front text-primary me-2" style="font-size: 2rem;"></i>
+                    <h5 class="card-title mb-0">Veicoli</h5>
+                </div>
+                <p class="card-text mb-4">Gestione completa del parco veicoli con possibilità di aggiungere, modificare ed eliminare.</p>
+                <div class="mt-auto">
+                    <a href="../veicoli" class="btn btn-primary w-100">
+                        <i class="bi bi-arrow-right-circle"></i> Vai ai Veicoli
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- // Targhe card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100 card-home">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-tag text-primary me-2" style="font-size: 2rem;"></i>
+                    <h5 class="card-title mb-0">Targhe</h5>
+                </div>
+                <p class="card-text mb-4">Visualizza e gestisci tutte le targhe registrate nel sistema con relativi dati di emissione.</p>
+                <div class="mt-auto">
+                    <a href="../targhe" class="btn btn-primary w-100">
+                        <i class="bi bi-arrow-right-circle"></i> Vai alle Targhe
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- // Revisioni card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100 card-home">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-clipboard-check text-primary me-2" style="font-size: 2rem;"></i>
+                    <h5 class="card-title mb-0">Revisioni</h5>
+                </div>
+                <p class="card-text mb-4">Monitora tutte le revisioni dei veicoli con relativi esiti e motivazioni per quelle negative.</p>
+                <div class="mt-auto">
+                    <a href="../revisioni" class="btn btn-primary w-100">
+                        <i class="bi bi-arrow-right-circle"></i> Vai alle Revisioni
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'includes/login/help-modal.html' %} 
+
+{% include 'includes/footer.html' %} 
+
+{% endblock %} 

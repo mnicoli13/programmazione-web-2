@@ -1,0 +1,100 @@
+<!-- // Home page content -->
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %} 
+{% block content %}
+
+  <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="page-title d-flex align-items-center"><i class="bi bi-car-front"></i> Gestione Veicoli</h1>
+      <button
+        id="add-veicolo-btn"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#addVeicoloModal"
+      >
+        <i class="bi bi-plus-circle"></i> Aggiungi Veicolo
+      </button>
+    </div>
+    <p class="intro-text">
+      In questa sezione puoi visualizzare, aggiungere, modificare ed eliminare
+      veicoli. Puoi utilizzare i filtri per cercare veicoli specifici per telaio,
+      marca, modello o data di produzione.
+    </p>
+  </div>
+
+  <!-- Notification area -->
+  <div id="notification-area"></div>
+
+  <!-- Include the filter component -->
+  {% include 'includes/filter.html' %}
+
+  <!-- Empty state for no results -->
+  <div id="empty-state" class="empty-state" style="display: none">
+    <i class="bi bi-search"></i>
+    <h4>Nessun veicolo trovato</h4>
+    <p>
+      Prova a modificare i filtri o aggiungi un nuovo veicolo utilizzando il
+      pulsante in alto.
+    </p>
+    <button
+      class="btn btn-primary"
+      id="add-veicolo-empty-btn"
+      data-bs-toggle="modal"
+      data-bs-target="#addVeicoloModal"
+    >
+      <i class="bi bi-plus-circle"></i> Aggiungi Veicolo
+    </button>
+  </div>
+
+  <!-- Table container -->
+  <div id="table-container" data-table-name="veicolo" class="mb-4">
+    <div class="table-responsive">
+      <table
+        id="myTable"
+        data-table-name="Veicolo"
+        class="table table-striped table-hover"
+      >
+        <thead>
+          <tr>
+            <!-- Qui dichiari tutte le colonne che hai in `columns` -->
+            <th class="sortable" data-column="telaio" data-order="asc">
+              Numero Telaio<i class="bi bi-arrow-down-up text-muted small"></i>
+            </th>
+            <th class="sortable" data-column="marca" data-order="asc">
+              Marca <i class="bi bi-arrow-down-up text-muted small"></i>
+            </th>
+            <th class="sortable" data-column="modello" data-order="asc">
+              Modello <i class="bi bi-arrow-down-up text-muted small"></i>
+            </th>
+            <th class="sortable" data-column="dataProd" data-order="asc">
+              Data Produzione<i class="bi bi-arrow-down-up text-muted small"></i>
+            </th>
+            <th class="text-center">Azioni</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- sarà riempito dinamicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- optional: empty state -->
+    <div id="empty-state" style="display: none">Nessun risultato</div>
+
+    <!-- Table will be loaded here via AJAX -->
+    <div class="table-loader">
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Caricamento...</span>
+        </div>
+        <p class="mt-2 text-muted">Caricamento dei dati in corso...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include modali -->
+  {% include 'includes/modals/add_veicolo_modal.html' %} 
+  {% include 'includes/modals/edit_veicolo_modal.html' %} 
+  {% include 'includes/modals/delete_veicolo_modal.html' %} 
+  {% include 'includes/footer.html'%} 
+{% endblock %}

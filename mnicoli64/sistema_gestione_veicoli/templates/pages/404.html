@@ -1,0 +1,37 @@
+<!-- // Home page content -->
+{% extends 'base.html' %} {% load crispy_forms_tags %} 
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-exclamation-triangle text-warning" style="font-size: 5rem;"></i>
+                    </div>
+                    <h1 class="display-4 mb-4">Pagina non trovata</h1>
+                    <p class="lead mb-4">La pagina che stai cercando non esiste o è stata spostata.</p>
+                    <div class="d-grid gap-2 col-md-6 mx-auto">
+                        <a href="homepage.php" class="btn btn-primary">
+                            <i class="bi bi-house-door"></i> Torna alla Homepage
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="window.history.back();">
+                            <i class="bi bi-arrow-left"></i> Torna indietro
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-search"></i> Hai bisogno di aiuto?</h5>
+                    <p class="card-text">Prova a utilizzare il menu di navigazione per trovare ciò che stai cercando o contatta l'amministratore se il problema persiste.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'includes/footer.html' %} 
+
+{% endblock %} 

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="page-title d-flex align-items-center"><i class="bi bi-tag"></i> {{ page_title }}</h1>
+  </div>
+  <p class="intro-text">{{ page_description }}</p>
+</div>
+
+<div id="notification-area"></div>
+
+{# Include the reusable filter snippet #}
+{% include 'includes/filter.html' %}
+
+<div id="empty-state" class="empty-state" style="display: none;">
+  <i class="bi bi-search"></i>
+  <h4>Nessuna targa trovata</h4>
+  <p>Prova a modificare i filtri di ricerca per trovare i dati desiderati.</p>
+</div>
+
+<div id="table-container" data-table-name="targa" class="mb-4">
+  <div class="table-responsive">
+    <table id="myTable" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="sortable" data-column="numero" data-order="asc">
+            Numero <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+          <th class="sortable" data-column="dataEm" data-order="asc">
+            Data Emissione <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+          <th class="sortable" data-column="stato" data-order="asc">
+            Stato <i class="bi bi-arrow-down-up text-muted small"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in targhe %}
+        <tr>
+          <td>
+            {{ t.numero }}
+          </td>
+          <td>{{ t.dataEm }}</td>
+          {% comment %} <td>{{ t.stato }}</td> {% endcomment %}
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="text-center">Nessun risultato</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-loader">
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Caricamento...</span>
+      </div>
+      <p class="mt-2 text-muted">Caricamento dei dati in corso...</p>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">
+      <i class="bi bi-info-circle text-primary"></i> Informazioni sulle targhe
+    </h5>
+    <p class="card-text">
+      Le targhe vengono assegnate ai veicoli e possono essere attive o restituite.
+      Puoi visualizzare i dettagli delle assegnazioni nelle sezioni
+      {% comment %} <a href="{% url 'targa-attiva-list' %}">Targhe Attive</a>
+      e <a href="{% url 'targa-restituita-list' %}">Targhe Restituite</a>. {% endcomment %}
+    </p>
+  </div>
+</div>
+
+{% if targa_from_url %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('#filter-numero').value = "{{ targa_from_url }}";
+    document.querySelector('#filter-form').submit();
+  });
+</script>
+{% endif %}
+
+{% include 'includes/footer.html' %}
+{% endblock %}
