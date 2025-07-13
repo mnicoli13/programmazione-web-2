@@ -8,7 +8,7 @@
                         <span class="text-muted">&copy; {% now "Y" %} Sistema Gestione Veicoli</span>
                     </div>
                     <div class="col-lg-6 text-lg-end text-center">
-                        <a href="https://github.com/mnicoli13/programmazione-web" target="_blank" class="text-decoration-none me-3 text-secondary">
+                        <a href="https://github.com/mnicoli13/programmazione-web-2" target="_blank" class="text-decoration-none me-3 text-secondary">
                             <i class="bi bi-github"></i> GitHub
                         </a>
                         <a href="#" class="text-decoration-none text-secondary" data-bs-toggle="modal" data-bs-target="#helpModal">
@@ -53,17 +53,10 @@
             const URL_TARGHE_ATTIVE_LIST   = "{% url 'targhe_attive_list' %}";
             const URL_TARGHE_RESTITUITE    = "{% url 'targhe_restituite_list' %}";
         
-            const URL_API_AUTO_LOGIN       = "{% url 'api-auto-login' %}";
-            const URL_API_LOGIN            = "{% url 'api-login' %}";
-            const URL_API_REGISTER         = "{% url 'api-register' %}";
-            const URL_API_CHECK_USERNAME   = "{% url 'api-check-username' %}";
-            const URL_API_CHECK_EMAIL      = "{% url 'api-check-email' %}";
-
             const URL_API_TABLE            = "{% url 'api-table' %}";
         </script>
         <script src="{% static 'js/main.js' %}"></script>
         <script src="{% static 'js/crud.js' %}"></script>
         <script src="{% static 'js/filter.js' %}"></script>
-        <script src="{% static 'js/auth.js' %}"></script>
     </body>
 </html>

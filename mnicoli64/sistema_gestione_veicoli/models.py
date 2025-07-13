@@ -1,8 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.urls import reverse
-
 
 class Veicolo(models.Model):
     telaio = models.CharField(
@@ -29,7 +27,6 @@ class Veicolo(models.Model):
     
     def get_absolute_url(self):
         return reverse('veicolo_detail', kwargs={'pk': self.telaio})
-
 
 class Targa(models.Model):
     numero = models.CharField(
@@ -68,7 +65,6 @@ class Targa(models.Model):
             except TargaRestituita.DoesNotExist:
                 pass
         return 'Non assegnata'
-
 
 class Revisione(models.Model):
     ESITO_CHOICES = [
@@ -123,7 +119,6 @@ class Revisione(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
-
 class TargaAttiva(models.Model):
     targa = models.OneToOneField(
         Targa,
@@ -167,24 +162,3 @@ class TargaRestituita(models.Model):
         managed = False
         verbose_name = "Targa Restituita"
         verbose_name_plural = "Targhe Restituite"
-
-class Utenti(models.Model):
-    """
-    Modello per mappare la tabella Utenti esistente.
-    Utilizzato per la migrazione dei dati verso Django User.
-    """
-    id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(null=True, blank=True)
-    
-    class Meta:
-        db_table = 'Utenti'
-        verbose_name = "Utente (Legacy)"
-        verbose_name_plural = "Utenti (Legacy)"
-        managed = False  # Django non gestirà questa tabella
-    
-    def __str__(self):
-        return self.username

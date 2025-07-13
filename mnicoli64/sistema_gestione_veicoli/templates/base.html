@@ -32,9 +32,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
-    {% if request.resolver_match.url_name == 'login' %}
-      <link rel="stylesheet" href="{% static 'css/login.css' %}" />
-    {% endif %} {% block extra_css %}{% endblock %}
+    {% block extra_css %}{% endblock %}
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -45,35 +43,11 @@
         <div class="d-flex justify-content-between align-items-center">
           <a href="{% url 'dashboard' %}" class="logo text-decoration-none">
             <i class="bi bi-car-front"></i> Sistema Gestione Veicoli
-          </a>
-
-          <!-- User menu or login button -->
-          {% if user.is_authenticated %}
-          <div>
-            <!-- User Menu -->
-            <div class="dropdown" id="user-menu">
-              <button class="btn btn-outline-primary dropdown-toggle" type="button" id="user-menu-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-circle"></i>
-                <span id="user-menu-username">{{ user.username }}</span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu-dropdown">
-                <li>
-                  <a
-                    class="dropdown-item text-danger"
-                    href="{% url 'logout' %}"
-                    id="logout-button"
-                    ><i class="bi bi-box-arrow-right"></i> Logout</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
-          {% endif %}
+          </a>     
         </div>
       </div>
     </header>
 
-    {% if user.is_authenticated %}
     <nav
       class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4"
     >
@@ -143,10 +117,9 @@
         </div>
       </div>
     </nav>
-    {% endif %}
 
     <div
-      class="container main-container py-4 {% if not user.is_authenticated %}d-flex flex-column{% endif %}"
+      class="container main-container py-4"
     >
       {% if messages %}
       <div id="notification-area">

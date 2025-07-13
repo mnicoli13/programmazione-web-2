@@ -2,8 +2,6 @@ import re
 import logging
 import json
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.views.decorators.http import require_http_methods, require_GET
@@ -14,7 +12,6 @@ from django.core.paginator import Paginator
 from django.db.models import Case, When, Value, CharField
 
 from django.views.decorators.http import require_POST
-from django.contrib.auth import get_user_model, authenticate, login
 from django.utils import timezone
 from django.db import IntegrityError, transaction, DatabaseError, connection
 import json
@@ -26,7 +23,6 @@ from .forms import VeicoloForm
 logger = logging.getLogger(__name__)
 
 # Homepage View
-@login_required
 def dashboard(request):
     """Dashboard principale del sistema"""
     context = {
@@ -90,7 +86,7 @@ REVISIONE_FIELDS = [
     'numero', 'targa', 'dataRev', 'esito','motivazione'
 ]
 
-class VeicoloListView(LoginRequiredMixin, ListView):
+class VeicoloListView(ListView):
     model = Veicolo
     template_name = 'pages/veicolo.html'
     context_object_name = 'veicoli'
@@ -120,12 +116,12 @@ class VeicoloListView(LoginRequiredMixin, ListView):
 
         return ctx
 
-class VeicoloDetailView(LoginRequiredMixin, DetailView):
+class VeicoloDetailView(DetailView):
     model = Veicolo
     template_name = 'pages/veicoli/detail.html'
     context_object_name = 'veicolo'
 
-class VeicoloCreateView(LoginRequiredMixin, CreateView):
+class VeicoloCreateView(CreateView):
     model = Veicolo
     form_class = VeicoloForm
     template_name = 'pages/veicoli/form.html'
@@ -135,7 +131,7 @@ class VeicoloCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, 'Veicolo aggiunto con successo!')
         return super().form_valid(form)
 
-class VeicoloUpdateView(LoginRequiredMixin, UpdateView):
+class VeicoloUpdateView(UpdateView):
     model = Veicolo
     form_class = VeicoloForm
     template_name = 'pages/veicoli/form.html'
@@ -145,7 +141,7 @@ class VeicoloUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Veicolo modificato con successo!')
         return super().form_valid(form)
 
-class VeicoloDeleteView(LoginRequiredMixin, DeleteView):
+class VeicoloDeleteView(DeleteView):
     model = Veicolo
     template_name = 'pages/veicoli/confirm_delete.html'
     success_url = reverse_lazy('veicoli_list')
@@ -158,7 +154,6 @@ class VeicoloDeleteView(LoginRequiredMixin, DeleteView):
 # API VIEWS per AJAX (compatibilità con frontend PHP)
 # =============================================================================
 
-@login_required
 @require_http_methods(["GET"])
 def get_veicoli_data(request):
     """API per ottenere dati veicoli con filtri (compatibile con AJAX frontend PHP)"""
@@ -233,8 +228,6 @@ def get_veicoli_data(request):
             'message': str(e)
         }, status=500)
 
-
-@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_veicolo_api(request):
@@ -281,8 +274,6 @@ def add_veicolo_api(request):
             'message': str(e)
         }, status=500)
 
-
-@login_required
 @require_http_methods(["GET"])
 def get_veicolo_detail_api(request, telaio):
     """API per ottenere dettagli singolo veicolo"""
@@ -307,8 +298,6 @@ def get_veicolo_detail_api(request, telaio):
             'message': str(e)
         }, status=500)
 
-
-@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def update_veicolo_api(request, telaio):
@@ -353,8 +342,6 @@ def update_veicolo_api(request, telaio):
             'message': str(e)
         }, status=500)
 
-
-@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def delete_veicolo_api(request, telaio):
@@ -374,12 +361,11 @@ def delete_veicolo_api(request, telaio):
             'message': str(e)
         }, status=500)
 
-
 # =============================================================================
 # TARGHE VIEWS
 # =============================================================================
 
-class TargaListView(LoginRequiredMixin, ListView):
+class TargaListView(ListView):
     model = Targa
     template_name = 'pages/targa.html'
     context_object_name = 'targhe'
@@ -439,7 +425,6 @@ class TargaAttivaListView(ListView):
 
         return ctx
 
-@login_required
 @require_http_methods(["GET"])
 def get_targhe_data(request):
     """API per ottenere dati targhe con filtri"""
@@ -496,7 +481,6 @@ def get_targhe_data(request):
             'message': str(e)
         }, status=500)
 
-@login_required
 @require_http_methods(["GET"])
 def table_api(request):
     table   = request.GET.get('table', '')
@@ -689,7 +673,7 @@ def table_api(request):
 # ALTRE VIEWS (Revisioni, TargheAttive, TargheRestituite)
 # =============================================================================
 
-class RevisioneListView(LoginRequiredMixin, ListView):
+class RevisioneListView(ListView):
     model = Revisione
     template_name = 'pages/revisione.html'
     context_object_name = 'revisioni'
@@ -719,8 +703,7 @@ class RevisioneListView(LoginRequiredMixin, ListView):
 
         return ctx
 
-
-class TargaRestituitaListView(LoginRequiredMixin, ListView):
+class TargaRestituitaListView(ListView):
     model = TargaRestituita
     template_name = 'pages/targa_restituita.html'
     context_object_name = 'targhe_restituite'
@@ -750,252 +733,9 @@ class TargaRestituitaListView(LoginRequiredMixin, ListView):
 
         return ctx
 
-
 # =============================================================================
 # AUTH VIEWS CUSTOM
 # =============================================================================
-
-User = get_user_model()
-
-@require_POST
-def auto_login(request):
-    user_id = request.POST.get('user_id')
-    if not user_id:
-        return JsonResponse({'success': False, 'message': 'ID utente mancante'}, status=400)
-
-    try:
-        user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'success': False, 'message': 'Utente non trovato'}, status=404)
-
-    # Aggiorna last_login
-    user.last_login = timezone.now()
-    user.save(update_fields=['last_login'])
-
-    # Effettua il login (popola session)
-    user.backend = 'django.contrib.auth.backends.ModelBackend'
-    login(request, user)
-
-    response_data = {
-        'success': True,
-        'message': 'Auto‑login effettuato con successo',
-        'user': {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-        }
-    }
-    return JsonResponse(response_data)
-
-@require_POST
-def api_login(request):
-    """
-    POST params:
-      - username: può essere nome utente o email
-      - password
-      - remember: opzionale, 'on' o 'true' per sessione lunga
-    """
-    username = request.POST.get('username', '').strip()
-    password = request.POST.get('password', '')
-    remember = request.POST.get('remember') in ('on', 'true', '1')
-
-    # 400: campi mancanti
-    if not username or not password:
-        return JsonResponse(
-            {'success': False, 'message': 'Nome utente e password sono obbligatori'},
-            status=400
-        )
-
-    # Decidiamo se è un'email
-    is_email = bool(re.match(r'^[^@]+@[^@]+\.[^@]+$', username))
-
-    user = None
-    if is_email:
-        try:
-            return JsonResponse(
-                {'success': False, 'message': username},
-                status=401
-            )
-            # cerchiamo l’utente con quell’email
-            user_obj = User.objects.get(email__iexact=username)
-            
-        except User.DoesNotExist:
-            return JsonResponse(
-                {'success': False, 'message': 'Nome utente o password non validi'},
-                status=401
-            )
-        # autentichiamo usando lo username effettivo
-        user = authenticate(request,
-                            username=user_obj.get_username(),
-                            password=password)
-    else:
-        # login via username
-        user = authenticate(request, username=username, password=password)
-
-    if user is None:
-        # 401: credenziali sbagliate
-        return JsonResponse(
-            {'success': False, 'message': 'Nome utente o password non validi'},
-            status=401
-        )
-
-    # aggiorniamo last_login
-    user.last_login = timezone.now()
-    user.save(update_fields=['last_login'])
-
-    # effettuiamo il login (popola session)
-    login(request, user)
-
-    # se “remember me” è selezionato, la sessione dura 30 giorni
-    if remember:
-        request.session.set_expiry(60 * 60 * 24 * 30)
-    else:
-        # default: sessione fino alla chiusura del browser
-        request.session.set_expiry(0)
-
-    # prepariamo i dati (senza password)
-    user_data = {
-        'id': user.id,
-        'username': user.get_username(),
-        'email': user.email,
-    }
-
-    return JsonResponse({
-        'success': True,
-        'message': 'Login effettuato con successo',
-        'user': user_data
-    }, status=200)
-    
-@require_POST
-def api_register(request):
-    """
-    POST params:
-      - username
-      - email
-      - password
-      - confirm_password
-      - terms (expected truthy, es. 'on' o 'true')
-    """
-    data = request.POST
-    required = ['username', 'email', 'password', 'confirm_password', 'terms']
-    missing = [f for f in required if not data.get(f)]
-    if missing:
-        return JsonResponse({
-            'success': False,
-            'message': 'I seguenti campi sono obbligatori: ' + ', '.join(missing)
-        }, status=400)
-
-    username = data['username'].strip()
-    email = data['email'].strip()
-    password = data['password']
-    confirm = data['confirm_password']
-    terms = data['terms']
-
-    # Username: almeno 4 e solo [A-Za-z0-9_]
-    if len(username) < 4:
-        return JsonResponse({'success': False,
-                             'message': 'Il nome utente deve contenere almeno 4 caratteri'},
-                            status=400)
-    if not re.fullmatch(r'[A-Za-z0-9_]+', username):
-        return JsonResponse({'success': False,
-                             'message': 'Il nome utente può contenere solo lettere, numeri e underscore'},
-                            status=400)
-
-    # Email valida
-    if not re.fullmatch(r'[^@]+@[^@]+\.[^@]+', email):
-        return JsonResponse({'success': False,
-                             'message': 'Indirizzo email non valido'},
-                            status=400)
-
-    # Password minimo 8 e conferma
-    if len(password) < 8:
-        return JsonResponse({'success': False,
-                             'message': 'La password deve contenere almeno 8 caratteri'},
-                            status=400)
-    if password != confirm:
-        return JsonResponse({'success': False,
-                             'message': 'Le password non corrispondono'},
-                            status=400)
-
-    # “Terms” deve essere truthy
-    if terms not in ('on', 'true', '1'):
-        return JsonResponse({'success': False,
-                             'message': 'Devi accettare i termini'},
-                            status=400)
-
-    # Controllo unicità username/email e creazione utente
-    try:
-        with transaction.atomic():
-            # create_user gestisce hashing password e last_login di default
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-            )
-            # Imposta created_at se lo usi (altrimenti è gestito da auto_now_add)
-            if hasattr(user, 'created_at'):
-                user.created_at = timezone.now()
-                user.save(update_fields=['created_at'])
-    except IntegrityError as e:
-        # Assumiamo che IntegrityError arrivi per duplicate fields
-        if User.objects.filter(username__iexact=username).exists():
-            msg = 'Nome utente già in uso'
-        elif User.objects.filter(email__iexact=email).exists():
-            msg = 'Email già registrata'
-        else:
-            msg = 'Errore durante la registrazione'
-        return JsonResponse({'success': False, 'message': msg}, status=400)
-    except Exception as e:
-        return JsonResponse({'success': False,
-                             'message': f'Errore nella registrazione: {str(e)}'},
-                            status=500)
-
-    return JsonResponse({
-        'success': True,
-        'message': 'Registrazione completata con successo'
-    }, status=200)
-
-logger = logging.getLogger(__name__)
-
-@require_POST
-def api_check_username(request):
-    """
-    POST params:
-      - username
-    Risponde con JSON: { available: true/false }
-    """
-    username = request.POST.get('username', '').strip()
-    if not username:
-        return JsonResponse(
-            {'error': 'Nome utente mancante', 'available': False},
-            status=400
-        )
-
-    try:
-        # Conta quanti utenti hanno quel username (case‐insensitive)
-        exists = User.objects.filter(username__iexact=username).exists()
-        return JsonResponse({'available': not exists}, status=200)
-
-    except DatabaseError as e:
-        logger.error("Errore DB in check_username: %s", e)
-        return JsonResponse(
-            {'error': 'db_error', 'message': str(e), 'available': False},
-            status=500
-        )
-
-@require_POST
-def api_check_email(request):
-    email = request.POST.get('email', '').strip()
-
-    if not email:
-        return JsonResponse({'error': 'Email mancante', 'available': False})
-
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT COUNT(*) FROM Utenti WHERE email = %s", [email])
-        count = cursor.fetchone()[0]
-
-    return JsonResponse({'available': count == 0})
-
 
 def lista_veicoli(request):
     filter_fields = [

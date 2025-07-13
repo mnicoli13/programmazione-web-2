@@ -12,23 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="Utenti",
-            fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
-                ("username", models.CharField(max_length=50, unique=True)),
-                ("email", models.EmailField(max_length=254, unique=True)),
-                ("password", models.CharField(max_length=255)),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
-                ("last_login", models.DateTimeField(blank=True, null=True)),
-            ],
-            options={
-                "verbose_name": "Utente (Legacy)",
-                "verbose_name_plural": "Utenti (Legacy)",
-                "db_table": "Utenti",
-                "managed": False,
-            },
-        ),
-        migrations.CreateModel(
             name="Targa",
             fields=[
                 (

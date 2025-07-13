@@ -33,12 +33,4 @@ urlpatterns = [
     path('targhe-restituite/', views.TargaRestituitaListView.as_view(), name='targhe_restituite_list'),
     
     path('api/table/', views.table_api, name='api-table'),
-    
-    # Auth (custom se necessario)
-    path('api/auth/auto_login/', views.auto_login, name='api-auto-login'),
-    path('api/auth/login/', views.api_login, name='api-login'),
-    path('api/auth/register/', views.api_register, name='api-register'),
-    path('api/auth/check_username/', views.api_check_username, name='api-check-username'),
-    path('check-email/', views.api_check_email, name='api-check-email'),
-
 ]

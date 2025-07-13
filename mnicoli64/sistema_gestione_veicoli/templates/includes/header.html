@@ -29,24 +29,10 @@
         <header id="header" class="header py-3 border-bottom">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="index.php" class="logo text-decoration-none">
-                        <i class="bi bi-car-front"></i> <?php echo SITE_TITLE; ?>
-                    </a>
+                    <a href="{% url 'dashboard' %}" class="logo text-decoration-none">
+                        <i class="bi bi-car-front"></i> Sistema Gestione Veicoli
+                    </a>    
                     
-                    <!-- User menu or login button -->
-                    <?php if (isAuthenticated()): ?>
-                        <div>   
-                            <!-- User Menu -->
-                            <div class="dropdown" id="user-menu">
-                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="user-menu-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i> <span id="user-menu-username"><?php echo htmlspecialchars($user['username']); ?></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu-dropdown">
-                                    <li><a class="dropdown-item text-danger" href="#" id="logout-button"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
         </header>
