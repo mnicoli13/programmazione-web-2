@@ -291,9 +291,8 @@ h6 {
 
 /* Icon styles */
 .bi {
-  font-size: 0.9rem;
-  margin-right: 0.25rem;
-  vertical-align: -0.125em;
+  font-size: inherit;
+  margin-right: 0.5rem;
 }
 
 /* Link styles for table references */

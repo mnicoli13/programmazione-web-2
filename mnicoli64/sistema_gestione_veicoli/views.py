@@ -526,8 +526,8 @@ def table_api(request):
                 Targa.objects
                 .annotate(
                     stato=Case(
-                        When(targaattiva__isnull=False,   then=Value('Attiva')),
-                        When(targarestituita__isnull=False, then=Value('Restituita')),
+                        When(targaattiva__targa__isnull=False, then=Value('Attiva')),
+                        When(targarestituita__targa__isnull=False, then=Value('Restituita')),
                         default=Value('Non assegnata'),
                         output_field=CharField()
                     )
