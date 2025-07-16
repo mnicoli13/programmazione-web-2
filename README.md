@@ -33,6 +33,31 @@ Then just open your browser and go to `http://127.0.0.1:8000/`.
 
 ---
 
+## Alternative Way :  Run with Docker
+
+If you're having issues running the app locally, you can use Docker:
+
+### 1. Install Docker
+Make sure you have Docker installed:
+👉 [Download Docker Desktop](https://www.docker.com/get-started)
+
+
+
+### 2. Build the Docker image
+go back to the project and run
+```bash
+docker-compose build
+```
+
+### 3. Start the application
+```bash
+docker-compose up
+```
+
+Then just open your browser and go to `http://127.0.0.1:8000/`.
+
+---
+
 ## Notes
 - Ensure you have Python 3.10+ installed.
 - If using macOS or Linux, replace the `venv\Scripts\activate` command with `source venv/bin/activate`.
