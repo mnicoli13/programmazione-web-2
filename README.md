@@ -41,15 +41,26 @@ If you're having issues running the app locally, you can use Docker:
 Make sure you have Docker installed:
 👉 [Download Docker Desktop](https://www.docker.com/get-started)
 
+### 2. Start Docker
+Open the Docker Desktop app.
+> You don’t need to create an account — just skip the login/registration if prompted
+
+### 3. wsl --update
+maybe you have to run this command, if your Windows subsystem is too old
+```bash
+wsl --update
+```
+> This updates the Windows Subsystem for Linux, which Docker uses under the hood.
+Then you have to restart docker and wait that the Docker Engine is ready
 
 
-### 2. Build the Docker image
+### 4. Build the Docker image
 go back to the project and run
 ```bash
 docker-compose build
 ```
 
-### 3. Start the application
+### 5. Start the application
 ```bash
 docker-compose up
 ```
@@ -66,6 +77,13 @@ Then just open your browser and go to `http://127.0.0.1:8000/`.
 python manage.py makemigrations
 python manage.py migrate
 ```
+
+- if occurs an error like this below you have to correct Documenti in Documents
+```bash
+failed to evaluate path
+"C:\\Users\\nicol\\Documenti\\uni\\progr-web-2\\programmazione-web-2\\mnicoli64"
+```
+
 
 ---
 
